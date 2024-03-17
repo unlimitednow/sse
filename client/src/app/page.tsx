@@ -14,7 +14,7 @@ export default function Home() {
 
   useEffect(() => {
     // Establishes a Server-Sent Events (SSE) connection with the server and handles SSE events.
-    const api = `http://localhost:3001/sse/${clientId}`;
+    const api = `https://sse-dev-fqan.4.us-1.fl0.io/sse/${clientId}`;
     const es = new EventSource(api);
 
     // Handle 'notification' event
