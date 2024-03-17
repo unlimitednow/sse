@@ -51,7 +51,7 @@ The following table describes the API endpoints provided by the server:
 
 `NestJS` `Multer`
 
-## Useful links
+## Useful link
 
 - [Using SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)
 
