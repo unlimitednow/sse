@@ -31,7 +31,7 @@ export default function FileForm({
     formData.append("file", file, file.name);
 
     try {
-      await fetch(`http://localhost:3001/upload/${clientId}`, {
+      await fetch(`https://starter-nestjs-dev-rehb.1.us-1.fl0.io/upload/${clientId}`, {
         method: "POST",
         body: formData,
       });
