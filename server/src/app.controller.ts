@@ -1,4 +1,14 @@
-import { Controller, Get, Param, Post, Req, Res, UploadedFile, UseInterceptors, Header } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+  Header,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { faker } from '@faker-js/faker';
@@ -32,7 +42,6 @@ export class AppController {
 
   @Post('upload/:client')
   @UseInterceptors(FileInterceptor('file'))
-  @Header('Access-Control-Allow-Origin', '*')
   async upload(
     @Param('client') client: string,
     @UploadedFile() file: Express.Multer.File,
@@ -78,7 +87,7 @@ export class AppController {
         res.status(500).send('Error writing CSV file');
       } else {
         console.log(`CSV file generated successfully at ${filePath}`);
-        res.download(filePath);
+        res.download(filePath); // Send the generated CSV file as a download
       }
     });
   }
