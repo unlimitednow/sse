@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Post,
-  Req,
-  Res,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Param, Post, Req, Res, UploadedFile, UseInterceptors, Header } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { faker } from '@faker-js/faker';
@@ -23,31 +14,25 @@ export class AppController {
   ) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Header('Access-Control-Allow-Origin', '*')
+  getHello(@Res() res: Response): void {
+    res.send(this.appService.getHello());
   }
 
-  /**
-   * Establishes a Server-Sent Events (SSE) connection with a specific client.
-   * @param {string} client - The unique identifier of the client.
-   * @param {Request} req - The request object representing the client's request.
-   * @param {Response} res - The response object representing the server's response.
-   * @returns {void}
-   */
   @Get('sse/:client')
+  @Header('Access-Control-Allow-Origin', '*')
   sse(
     @Param('client') client: string,
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    // Set up an event listener for the 'close' event on the request
     req.on('close', () => this.events.removeClient(client));
-    // Add the client to the server's list of connected clients and establish the SSE connection
     return this.events.addClient(client, res);
   }
 
   @Post('upload/:client')
   @UseInterceptors(FileInterceptor('file'))
+  @Header('Access-Control-Allow-Origin', '*')
   async upload(
     @Param('client') client: string,
     @UploadedFile() file: Express.Multer.File,
@@ -74,7 +59,8 @@ export class AppController {
   }
 
   @Get('csv')
-  generateCsv() {
+  @Header('Access-Control-Allow-Origin', '*')
+  generateCsv(@Res() res: Response): void {
     const filePath = './data.csv';
     let csvContent = 'name,email,phone,\n';
 
@@ -89,8 +75,10 @@ export class AppController {
     fs.writeFile(filePath, csvContent, (err) => {
       if (err) {
         console.error('Error writing CSV file:', err);
+        res.status(500).send('Error writing CSV file');
       } else {
         console.log(`CSV file generated successfully at ${filePath}`);
+        res.download(filePath);
       }
     });
   }
